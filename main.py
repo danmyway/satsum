@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 
 from requests import Request, Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
@@ -7,6 +8,8 @@ import argparse
 import configparser
 
 configfile = "conf.yaml"
+cwd = os.getcwd()
+
 
 def xconf():
     with open(configfile, "x") as conf:
