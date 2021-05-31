@@ -10,6 +10,18 @@ import configparser
 configfile = "conf.yaml"
 cwd = os.getcwd()
 
+#amount 1 returns average market price
+#convto == convert to
+convto = 'BTC'
+#convfrom == convert from
+convfrom = 'CZK'
+
+parser = argparse.ArgumentParser()
+#parser.add_argument()
+
+
+
+args = parser.parse_args()
 
 def xconf():
     with open(configfile, "x") as conf:
@@ -26,11 +38,11 @@ def readconfig():
 
 apiKey = readconfig()
 
-url = 'https://pro-api.coinmarketcap.com/v1/tools/price-conversion'
-params = {
+url_conversion = 'https://pro-api.coinmarketcap.com/v1/tools/price-conversion'
+params_conversion = {
     'amount': '1',
-    'id': '1',
-    'convert': 'CZK'
+    'symbol': f'{convto}',
+    'convert': f'{convfrom}'
 }
 headers = {
     'Accepts': 'application/json',
@@ -41,8 +53,9 @@ session = Session()
 session.headers.update(headers)
 
 try:
-    response = session.get(url, params=params)
-    data = json.loads(response.text)
+    response = session.get(url_conversion, params=params_conversion)
+    data_json = json.loads(response.text)
+    data = data_json['data']['quote'][f'{convfrom}']['price']
     print(data)
 except (ConnectionError, Timeout, TooManyRedirects) as e:
     print(e)
